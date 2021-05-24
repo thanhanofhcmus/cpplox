@@ -1,0 +1,35 @@
+fun max(a, b) {
+    if (a > b)
+        return a;
+    else 
+        return b;
+}
+
+// Single line comment
+
+/* m
+   u
+   l
+   t
+   y
+   /* asdkjaskd  */ asdl
+   
+   l
+   i
+   n
+   e
+   comment
+*/
+
+fun sum(a, b) {
+    var s = 0;
+    var i = a;
+    for (; i < b; i = i + 1)
+        s = s + i;
+    return s;
+}
+
+var x = 1;
+var y = 10;
+print max(a, b);
+print sum(a, b);
