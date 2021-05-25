@@ -11,7 +11,7 @@ private:
 
     const String source;
     std::vector<Token> tokens{};
-    std::stack<bool> nested_comment{};
+    std::stack<int> nested_comment{};
     int start = 0;
     int current = 0;
     int line = 1;
@@ -20,8 +20,8 @@ private:
 
 public:
 
-    Scanner(String cref _source)
-        :source(_source)  {}
+    explicit Scanner(String _source)
+        :source(std::move(_source))  {}
 
     std::vector<Token> ScanTokens();
 
@@ -29,28 +29,33 @@ private:
 
     void ScanToken();
 
+    [[nodiscard]]
     bool IsAtEnd() const;
 
     char Advance();
 
+    [[nodiscard]]
     char Peek() const;
 
+    [[nodiscard]]
     char PeekNext() const;
 
     bool Match(char expected);
 
-    bool IsDigit(char c) const;
+    [[nodiscard]]
+    static bool IsDigit(char c) ;
 
-    bool IsAlpha(char c) const;
+    [[nodiscard]]
+    static bool IsAlpha(char c) ;
 
-    bool IsAlphaNumeric(char c) const;
+    [[nodiscard]]
+    static bool IsAlphaNumeric(char c) ;
 
     void StringLiteral();
 
     void NumberLiteral();
 
-    void Identifiter();
+    void Identifier();
 
     void AddToken(TokenType type, Literal cref literal = {});
-
 };

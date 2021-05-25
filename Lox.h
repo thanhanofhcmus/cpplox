@@ -18,4 +18,6 @@ public:
     static void Error(int line, String cref message);
 
     static void Report(int line, String cref where, String cref message);
+
+    static bool HadError();
 };

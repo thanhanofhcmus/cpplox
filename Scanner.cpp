@@ -4,7 +4,7 @@
 
 using TT = TokenType;
 
-const std::map<String, TokenType> Scanner::keywords = [] {
+const std::map<String, TokenType> Scanner::keywords = [] { // NOLINT
     std::map<String, TokenType> kws;
     kws.insert({"and",    TT::And});
     kws.insert({"class",  TT::Class});
@@ -26,12 +26,12 @@ const std::map<String, TokenType> Scanner::keywords = [] {
 }();
 
 std::vector<Token> Scanner::ScanTokens() {
-    while (!IsAtEnd()) {
+    while (!IsAtEnd() && !Lox::HadError()) {
         start = current;
         ScanToken();
     }
 
-    tokens.push_back(Token(TT::Eof, line));
+    tokens.emplace_back(TT::Eof, line);
 
     return tokens;
 }
@@ -88,7 +88,7 @@ void Scanner::ScanToken() {
             if (IsDigit(c)) {
                 NumberLiteral();
             } else if (IsAlpha(c)) {
-                Identifiter();
+                Identifier();
             } else {
                 Lox::Error(line, "Undefined character");
             }
@@ -123,15 +123,15 @@ bool Scanner::Match(char expected) {
     return true;
 }
 
-bool Scanner::IsDigit(char c) const {
+bool Scanner::IsDigit(char c) {
     return std::isdigit(c);
 }
 
-bool Scanner::IsAlpha(char c) const {
+bool Scanner::IsAlpha(char c) {
     return std::isalpha(c) || c == '_';
 }
 
-bool Scanner::IsAlphaNumeric(char c) const {
+bool Scanner::IsAlphaNumeric(char c) {
     return IsDigit(c) || IsAlpha(c);
 }
 
@@ -155,7 +155,7 @@ void Scanner::NumberLiteral() {
     while (IsDigit(Peek()))
         Advance();
 
-    if (Peek() == '.') {
+    if (Peek() == '.' && IsDigit(PeekNext())) {
         Advance();
         while (IsDigit(Peek()))
             Advance();
@@ -165,13 +165,13 @@ void Scanner::NumberLiteral() {
     AddToken(TT::Number, Literal(literal));
 }
 
-void Scanner::Identifiter() {
+void Scanner::Identifier() {
     while (IsAlphaNumeric(Peek()))
         Advance();
 
     String text = source.substr(start, current - start);
     auto it = keywords.find(text);
-    TokenType type = it == keywords.end() ? TT::Identifiter : it->second;
+    TokenType type = it == keywords.end() ? TT::Identifier : it->second;
     AddToken(type);
 }
 

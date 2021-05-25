@@ -13,7 +13,7 @@ enum class TokenType {
     Greater, GreaterEqual,
     Less, LessEqual,
 
-    Identifiter, String, Number,
+    Identifier, String, Number,
 
     And, Class, Else, False, Fun, For,
     If, Nil, Or, Print, Return,
@@ -44,7 +44,7 @@ inline auto TokenTypeName(TokenType type) {
     case TT::GreaterEqual:  return "GreaterEqual";
     case TT::Less:          return "Less";
     case TT::LessEqual:     return "LessEqual";
-    case TT::Identifiter:   return "Identifiter";
+    case TT::Identifier:   return "Identifier";
     case TT::String:        return "String";
     case TT::Number:        return "Number";
     case TT::And:           return "And";
@@ -65,7 +65,7 @@ inline auto TokenTypeName(TokenType type) {
     case TT::While:         return "While";
     case TT::Eof:           return "EOF";
     }
-    return "Unknow type";
+    return "Unknown type";
 }
 
 class Token {
@@ -78,9 +78,10 @@ private:
 
 public:
 
-    Token(TokenType _type, int _line, String cref _lexeme = "", Literal cref _literal = {})
-        : type(_type), lexeme(_lexeme), literal(_literal), line(_line) {}
+    Token(TokenType _type, int _line, String _lexeme = "", Literal _literal = {})
+        : type(_type), lexeme(std::move(_lexeme)), literal(std::move(_literal)), line(_line) {}
 
+    [[nodiscard]]
     String ToString() const {
         constexpr size_t uni_size = 12;
         String type_name = TokenTypeName(type);

@@ -44,3 +44,7 @@ void Lox::Report(int line, String cref where, String cref message) {
     std::cerr << "Line " << line << "] Error" << where << ": " << message << '\n';
     had_error = true;
 }
+
+bool Lox::HadError() {
+    return had_error;
+}
